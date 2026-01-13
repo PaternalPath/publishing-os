@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AppStateProvider } from "@/lib/use-app-state";
+import { ToastProvider } from "@/lib/use-toast";
 import { Navigation } from "@/components/navigation";
+import { ToastContainer } from "@/components/toast";
 
 export const metadata: Metadata = {
   title: "Publishing OS - Demo",
@@ -17,10 +19,13 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-sans antialiased bg-zinc-50">
         <AppStateProvider>
-          <Navigation />
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {children}
-          </main>
+          <ToastProvider>
+            <Navigation />
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              {children}
+            </main>
+            <ToastContainer />
+          </ToastProvider>
         </AppStateProvider>
       </body>
     </html>

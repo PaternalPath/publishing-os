@@ -1,14 +1,23 @@
 'use client';
 
 import { useAppState } from '@/lib/use-app-state';
+import { useToast } from '@/lib/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Download, FileJson, FileText } from 'lucide-react';
+import { PageHeader } from '@/components/page-header';
+import { EmptyState } from '@/components/ui/empty-state';
+import { Download, FileJson, FileText, Package } from 'lucide-react';
 import type { Project } from '@/types';
 
 export default function ExportsPage() {
   const { state, exportJSON } = useAppState();
+  const { addToast } = useToast();
+
+  const handleExportAll = () => {
+    exportJSON();
+    addToast('success', 'Export Complete', 'All data has been exported successfully');
+  };
 
   const exportMetadataPack = (project: Project) => {
     const metadata = project.metadata;
@@ -65,6 +74,7 @@ Generated: ${new Date().toISOString()}
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+    addToast('success', 'Metadata Pack Exported', `"${project.metadata.title}" metadata pack has been downloaded`);
   };
 
   const exportProjectJSON = (project: Project) => {
@@ -79,53 +89,68 @@ Generated: ${new Date().toISOString()}
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+    addToast('success', 'Project JSON Exported', `"${project.metadata.title}" has been exported as JSON`);
   };
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-zinc-900">Exports</h1>
-        <p className="text-zinc-600 mt-1">Export your project data and metadata</p>
-      </div>
+      <PageHeader
+        title="Exports"
+        description="Export your project data and metadata"
+        action={
+          <Button onClick={handleExportAll} disabled={state.projects.length === 0}>
+            <Download className="h-4 w-4 mr-2" />
+            Export All Data
+          </Button>
+        }
+      />
 
-      <Card>
-        <CardHeader>
+      <Card className="hover:shadow-md transition-shadow">
+        <CardHeader className="border-b border-zinc-100">
           <CardTitle className="flex items-center gap-2">
-            <FileJson className="h-5 w-5" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <FileJson className="h-5 w-5 text-blue-600" />
+            </div>
             Complete Data Export
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <p className="text-zinc-600 mb-4">
             Export all projects and activities as a JSON file. This includes complete data and can be used for backup or migration.
           </p>
-          <Button onClick={exportJSON}>
+          <Button onClick={handleExportAll} disabled={state.projects.length === 0}>
             <Download className="h-4 w-4 mr-2" />
             Export All Data (JSON)
           </Button>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
+      <Card className="hover:shadow-md transition-shadow">
+        <CardHeader className="border-b border-zinc-100">
           <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
+            <div className="p-2 bg-green-100 rounded-lg">
+              <Package className="h-5 w-5 text-green-600" />
+            </div>
             Project Metadata Packs
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <p className="text-zinc-600 mb-6">
             Export individual project metadata in a clean, formatted text file. Perfect for copying to KDP, IngramSpark, or other publishing platforms.
           </p>
 
-          <div className="space-y-4">
-            {state.projects.length === 0 ? (
-              <p className="text-zinc-500 text-sm">No projects to export</p>
-            ) : (
-              state.projects.map((project) => (
+          {state.projects.length === 0 ? (
+            <EmptyState
+              icon={<Package className="h-8 w-8 text-zinc-400" />}
+              title="No projects to export"
+              description="Create projects to export their metadata"
+            />
+          ) : (
+            <div className="space-y-3">
+              {state.projects.map((project) => (
                 <div
                   key={project.id}
-                  className="flex items-center justify-between p-4 border border-zinc-200 rounded-lg hover:border-zinc-300"
+                  className="flex items-center justify-between p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors"
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
@@ -155,20 +180,29 @@ Generated: ${new Date().toISOString()}
                     </Button>
                   </div>
                 </div>
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 
       <Card className="border-blue-200 bg-blue-50">
         <CardContent className="pt-6">
-          <h3 className="font-semibold text-blue-900 mb-2">About Metadata Packs</h3>
-          <p className="text-sm text-blue-800">
-            Metadata Packs are formatted text files containing all your project information in a clean, readable format.
-            You can copy and paste sections directly into publishing platforms like Amazon KDP or IngramSpark,
-            ensuring consistency across all your publishing channels.
-          </p>
+          <div className="flex gap-3">
+            <div className="flex-shrink-0">
+              <div className="p-2 bg-blue-200 rounded-lg">
+                <FileText className="h-5 w-5 text-blue-700" />
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-blue-900 mb-2">About Metadata Packs</h3>
+              <p className="text-sm text-blue-800">
+                Metadata Packs are formatted text files containing all your project information in a clean, readable format.
+                You can copy and paste sections directly into publishing platforms like Amazon KDP or IngramSpark,
+                ensuring consistency across all your publishing channels.
+              </p>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -6,6 +6,22 @@ A comprehensive publishing workflow management system for indie authors, built w
 
 Publishing OS is a demo-first application that helps authors manage their book publishing projects from draft to publication. Track metadata, manage checklists for platforms like Amazon KDP and IngramSpark, organize assets, and export publication-ready metadata packs.
 
+## UI Highlights
+
+**Polished, Production-Ready Design**
+
+- **Modern Navigation**: Sticky header with logo, responsive mobile menu, and active state indicators
+- **Toast Notifications**: Real-time feedback for all user actions (create, update, export)
+- **Modal Dialogs**: Clean, accessible modals for forms and confirmations
+- **Empty States**: Helpful empty states with clear calls-to-action
+- **Interactive Cards**: Hover effects, smooth transitions, and visual hierarchy
+- **Status Filters**: Pill-style filter buttons with live counts
+- **Progress Indicators**: Gradient progress bars with completion percentages
+- **Consistent Spacing**: Professional layout with consistent padding and gaps
+- **Icon System**: Lucide icons with color-coded backgrounds for visual distinction
+
+All pages follow a unified design system with careful attention to typography, color, and spacing for a cohesive product feel.
+
 ## Features
 
 ### Project Management

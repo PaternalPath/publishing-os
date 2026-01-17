@@ -7,12 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input, Textarea, Select } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { TaskList } from '@/components/task-list';
 import type { Stage, ChecklistItem } from '@/types';
 import { nanoid } from 'nanoid';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
-type Tab = 'metadata' | 'checklist' | 'assets' | 'notes';
+type Tab = 'metadata' | 'tasks' | 'checklist' | 'assets' | 'notes';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -83,6 +84,7 @@ export default function ProjectDetailPage() {
 
   const tabs: { id: Tab; label: string }[] = [
     { id: 'metadata', label: 'Metadata' },
+    { id: 'tasks', label: 'Tasks' },
     { id: 'checklist', label: 'Checklist' },
     { id: 'assets', label: 'Assets' },
     { id: 'notes', label: 'Notes' },
@@ -145,6 +147,7 @@ export default function ProjectDetailPage() {
       {activeTab === 'metadata' && (
         <MetadataTab project={project} onUpdate={handleUpdateMetadata} />
       )}
+      {activeTab === 'tasks' && <TaskList projectId={project.id} />}
       {activeTab === 'checklist' && (
         <ChecklistTab
           project={project}

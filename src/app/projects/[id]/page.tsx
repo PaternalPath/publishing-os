@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input, Textarea, Select } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import type { ProjectStatus, ChecklistItem } from '@/types';
+import type { Stage, ChecklistItem } from '@/types';
 import { nanoid } from 'nanoid';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import Link from 'next/link';
@@ -42,8 +42,8 @@ export default function ProjectDetailPage() {
     });
   };
 
-  const handleUpdateStatus = (status: ProjectStatus) => {
-    updateProject(project.id, { status });
+  const handleUpdateStage = (stage: Stage) => {
+    updateProject(project.id, { stage });
   };
 
   const handleUpdateNotes = (notes: string) => {
@@ -101,18 +101,21 @@ export default function ProjectDetailPage() {
           </Link>
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-bold text-zinc-900">{project.metadata.title}</h1>
-            <Badge status={project.status} />
+            <Badge stage={project.stage} />
           </div>
           <p className="text-zinc-600 mt-1">by {project.metadata.author}</p>
         </div>
         <div className="flex gap-2">
           <Select
-            value={project.status}
-            onChange={(e) => handleUpdateStatus(e.target.value as ProjectStatus)}
+            value={project.stage}
+            onChange={(e) => handleUpdateStage(e.target.value as Stage)}
             options={[
-              { value: 'drafting', label: 'Drafting' },
-              { value: 'ready', label: 'Ready' },
-              { value: 'published', label: 'Published' },
+              { value: 'draft', label: 'Draft' },
+              { value: 'edit', label: 'Edit' },
+              { value: 'cover', label: 'Cover' },
+              { value: 'format', label: 'Format' },
+              { value: 'publish', label: 'Publish' },
+              { value: 'marketing', label: 'Marketing' },
             ]}
           />
           <Button variant="danger" onClick={handleDeleteProject}>

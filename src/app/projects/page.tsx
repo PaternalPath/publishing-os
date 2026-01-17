@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { PageHeader } from '@/components/page-header';
 import { EmptyState } from '@/components/ui/empty-state';
-import type { ProjectStatus, Project } from '@/types';
+import type { Stage, Project } from '@/types';
 import Link from 'next/link';
 import { Plus, Search, Filter, BookOpen, User } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -20,19 +20,19 @@ export default function ProjectsPage() {
   const router = useRouter();
   const { state, addProject } = useAppState();
   const { addToast } = useToast();
-  const [filterStatus, setFilterStatus] = useState<ProjectStatus | 'all'>('all');
+  const [filterStage, setFilterStage] = useState<Stage | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newProjectTitle, setNewProjectTitle] = useState('');
   const [newProjectAuthor, setNewProjectAuthor] = useState('');
 
   const filteredProjects = state.projects.filter((project) => {
-    const matchesStatus = filterStatus === 'all' || project.status === filterStatus;
+    const matchesStage = filterStage === 'all' || project.stage === filterStage;
     const matchesSearch =
       searchQuery === '' ||
       project.metadata.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.metadata.author.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearch;
+    return matchesStage && matchesSearch;
   });
 
   const handleCreateProject = (e: React.FormEvent) => {
@@ -40,7 +40,7 @@ export default function ProjectsPage() {
     if (!newProjectTitle.trim() || !newProjectAuthor.trim()) return;
 
     const newProject: Omit<Project, 'id' | 'createdAt' | 'updatedAt'> = {
-      status: 'drafting',
+      stage: 'draft',
       metadata: {
         title: newProjectTitle,
         author: newProjectAuthor,
@@ -60,11 +60,14 @@ export default function ProjectsPage() {
     addToast('success', 'Project Created', `"${newProjectTitle}" has been created successfully`);
   };
 
-  const statusFilters = [
+  const stageFilters = [
     { value: 'all', label: 'All Projects', count: state.projects.length },
-    { value: 'drafting', label: 'Drafting', count: state.projects.filter((p) => p.status === 'drafting').length },
-    { value: 'ready', label: 'Ready', count: state.projects.filter((p) => p.status === 'ready').length },
-    { value: 'published', label: 'Published', count: state.projects.filter((p) => p.status === 'published').length },
+    { value: 'draft', label: 'Draft', count: state.projects.filter((p) => p.stage === 'draft').length },
+    { value: 'edit', label: 'Edit', count: state.projects.filter((p) => p.stage === 'edit').length },
+    { value: 'cover', label: 'Cover', count: state.projects.filter((p) => p.stage === 'cover').length },
+    { value: 'format', label: 'Format', count: state.projects.filter((p) => p.stage === 'format').length },
+    { value: 'publish', label: 'Publish', count: state.projects.filter((p) => p.stage === 'publish').length },
+    { value: 'marketing', label: 'Marketing', count: state.projects.filter((p) => p.stage === 'marketing').length },
   ];
 
   return (
@@ -99,18 +102,18 @@ export default function ProjectsPage() {
 
             <div className="flex items-center gap-2 overflow-x-auto pb-2">
               <Filter className="h-4 w-4 text-zinc-500 flex-shrink-0" />
-              {statusFilters.map((filter) => (
+              {stageFilters.map((filter) => (
                 <button
                   key={filter.value}
-                  onClick={() => setFilterStatus(filter.value as ProjectStatus | 'all')}
+                  onClick={() => setFilterStage(filter.value as Stage | 'all')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-                    filterStatus === filter.value
+                    filterStage === filter.value
                       ? 'bg-blue-600 text-white'
                       : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
                   }`}
                 >
                   {filter.label}
-                  <span className={`ml-2 ${filterStatus === filter.value ? 'text-blue-100' : 'text-zinc-500'}`}>
+                  <span className={`ml-2 ${filterStage === filter.value ? 'text-blue-100' : 'text-zinc-500'}`}>
                     ({filter.count})
                   </span>
                 </button>
@@ -126,14 +129,14 @@ export default function ProjectsPage() {
           <CardContent className="py-12">
             <EmptyState
               icon={<BookOpen className="h-8 w-8 text-zinc-400" />}
-              title={searchQuery || filterStatus !== 'all' ? 'No projects found' : 'No projects yet'}
+              title={searchQuery || filterStage !== 'all' ? 'No projects found' : 'No projects yet'}
               description={
-                searchQuery || filterStatus !== 'all'
+                searchQuery || filterStage !== 'all'
                   ? 'Try adjusting your search or filters'
                   : 'Get started by creating your first publishing project'
               }
               action={
-                !searchQuery && filterStatus === 'all'
+                !searchQuery && filterStage === 'all'
                   ? {
                       label: 'Create Project',
                       onClick: () => setShowCreateModal(true),
@@ -163,7 +166,7 @@ export default function ProjectsPage() {
                         <h3 className="text-xl font-semibold text-zinc-900 group-hover:text-blue-600 transition-colors truncate">
                           {project.metadata.title}
                         </h3>
-                        <Badge status={project.status} />
+                        <Badge stage={project.stage} />
                       </div>
                       {project.metadata.subtitle && (
                         <p className="text-sm text-zinc-600 mb-3">{project.metadata.subtitle}</p>

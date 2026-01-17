@@ -16,9 +16,10 @@ export default function DashboardPage() {
 
   const kpis = {
     total: state.projects.length,
-    drafting: state.projects.filter((p) => p.status === 'drafting').length,
-    ready: state.projects.filter((p) => p.status === 'ready').length,
-    published: state.projects.filter((p) => p.status === 'published').length,
+    draft: state.projects.filter((p) => p.stage === 'draft').length,
+    inProgress: state.projects.filter((p) => ['edit', 'cover', 'format'].includes(p.stage)).length,
+    publishing: state.projects.filter((p) => p.stage === 'publish').length,
+    marketing: state.projects.filter((p) => p.stage === 'marketing').length,
   };
 
   const recentActivities = state.activities.slice(0, 8);
@@ -47,24 +48,32 @@ export default function DashboardPage() {
       textColor: 'text-zinc-900',
     },
     {
-      label: 'Drafting',
-      value: kpis.drafting,
+      label: 'Draft',
+      value: kpis.draft,
       icon: FileEdit,
+      iconBg: 'bg-gray-100',
+      iconColor: 'text-gray-600',
+      textColor: 'text-gray-600',
+    },
+    {
+      label: 'In Progress',
+      value: kpis.inProgress,
+      icon: TrendingUp,
       iconBg: 'bg-yellow-100',
       iconColor: 'text-yellow-600',
       textColor: 'text-yellow-600',
     },
     {
-      label: 'Ready',
-      value: kpis.ready,
+      label: 'Publishing',
+      value: kpis.publishing,
       icon: CheckCircle,
-      iconBg: 'bg-blue-100',
-      iconColor: 'text-blue-600',
-      textColor: 'text-blue-600',
+      iconBg: 'bg-green-100',
+      iconColor: 'text-green-600',
+      textColor: 'text-green-600',
     },
     {
-      label: 'Published',
-      value: kpis.published,
+      label: 'Marketing',
+      value: kpis.marketing,
       icon: Sparkles,
       iconBg: 'bg-green-100',
       iconColor: 'text-green-600',

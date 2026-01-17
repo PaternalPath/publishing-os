@@ -76,8 +76,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   const deleteProject = (id: string) => {
     setState((prev) => ({
+      ...prev,
       projects: prev.projects.filter((p) => p.id !== id),
       activities: prev.activities.filter((a) => a.projectId !== id),
+      tasks: prev.tasks.filter((t) => t.projectId !== id),
     }));
   };
 

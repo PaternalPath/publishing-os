@@ -45,7 +45,7 @@ ${metadata.blurb || 'No description provided'}
 STATUS & PROGRESS
 ========================================
 
-Status: ${project.status.toUpperCase()}
+Stage: ${project.stage.toUpperCase()}
 Created: ${new Date(project.createdAt).toLocaleDateString()}
 Last Updated: ${new Date(project.updatedAt).toLocaleDateString()}
 
@@ -155,7 +155,7 @@ Generated: ${new Date().toISOString()}
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
                       <h3 className="font-semibold text-zinc-900">{project.metadata.title}</h3>
-                      <Badge status={project.status} />
+                      <Badge stage={project.stage} />
                     </div>
                     <p className="text-sm text-zinc-600 mt-1">
                       by {project.metadata.penName || project.metadata.author}

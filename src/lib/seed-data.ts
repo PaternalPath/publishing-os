@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
 import type { AppState, Project, ChecklistItem } from '@/types';
+import { CURRENT_SCHEMA_VERSION } from './schemas';
 
 const baseChecklist: Omit<ChecklistItem, 'id'>[] = [
   { label: 'Prepare manuscript for upload', platform: 'both', completed: false },
@@ -24,7 +25,7 @@ export function getInitialState(): AppState {
   const projects: Project[] = [
     {
       id: nanoid(),
-      status: 'published',
+      stage: 'marketing',
       metadata: {
         title: 'The Midnight Garden',
         subtitle: 'A Tale of Mystery and Wonder',
@@ -52,7 +53,7 @@ export function getInitialState(): AppState {
     },
     {
       id: nanoid(),
-      status: 'ready',
+      stage: 'publish',
       metadata: {
         title: 'Code of Shadows',
         subtitle: 'Decoding the Digital Conspiracy',
@@ -80,7 +81,7 @@ export function getInitialState(): AppState {
     },
     {
       id: nanoid(),
-      status: 'ready',
+      stage: 'format',
       metadata: {
         title: 'Whispers in the Wind',
         author: 'Anonymous Poet',
@@ -106,7 +107,7 @@ export function getInitialState(): AppState {
     },
     {
       id: nanoid(),
-      status: 'drafting',
+      stage: 'edit',
       metadata: {
         title: 'The Last Algorithm',
         subtitle: 'When AI Became Self-Aware',
@@ -128,7 +129,7 @@ export function getInitialState(): AppState {
     },
     {
       id: nanoid(),
-      status: 'drafting',
+      stage: 'draft',
       metadata: {
         title: 'Recipes from Nowhere',
         subtitle: 'Culinary Adventures in Imaginary Lands',
@@ -161,5 +162,10 @@ export function getInitialState(): AppState {
     },
   ]);
 
-  return { projects, activities };
+  return {
+    version: CURRENT_SCHEMA_VERSION,
+    projects,
+    tasks: [], // Will be populated when tasks feature is fully implemented
+    activities,
+  };
 }

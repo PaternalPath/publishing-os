@@ -2,8 +2,8 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { nanoid } from 'nanoid';
-import type { AppState, Project, Activity, ChecklistItem } from '@/types';
-import { loadState, saveState } from './storage';
+import type { AppState, Project, Activity, ChecklistItem, Task } from '@/types';
+import { loadState, saveState, importStateFromJSON, loadDemoData } from './storage';
 import { getInitialState } from './seed-data';
 
 interface AppStateContextValue {
@@ -12,8 +12,13 @@ interface AppStateContextValue {
   updateProject: (id: string, updates: Partial<Project>) => void;
   deleteProject: (id: string) => void;
   updateChecklist: (projectId: string, checklist: ChecklistItem[]) => void;
+  addTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  updateTask: (id: string, updates: Partial<Task>) => void;
+  deleteTask: (id: string) => void;
   addActivity: (activity: Omit<Activity, 'id' | 'timestamp'>) => void;
   resetData: () => void;
+  importData: (jsonString: string) => Promise<void>;
+  loadDemo: () => Promise<void>;
   exportJSON: () => void;
 }
 
@@ -59,11 +64,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }));
 
     const project = state.projects.find((p) => p.id === id);
-    if (project && updates.status && updates.status !== project.status) {
+    if (project && updates.stage && updates.stage !== project.stage) {
       addActivity({
         projectId: id,
-        type: 'status_changed',
-        description: `Status changed from "${project.status}" to "${updates.status}"`,
+        type: 'stage_changed',
+        description: `Stage changed to "${updates.stage}"`,
       });
     } else if (updates.metadata) {
       addActivity({
@@ -76,8 +81,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   const deleteProject = (id: string) => {
     setState((prev) => ({
+      ...prev,
       projects: prev.projects.filter((p) => p.id !== id),
       activities: prev.activities.filter((a) => a.projectId !== id),
+      tasks: prev.tasks.filter((t) => t.projectId !== id),
     }));
   };
 
@@ -110,9 +117,79 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const addTask = (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const now = new Date().toISOString();
+    const newTask: Task = {
+      ...task,
+      id: nanoid(),
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    setState((prev) => ({
+      ...prev,
+      tasks: [...prev.tasks, newTask],
+    }));
+
+    addActivity({
+      projectId: newTask.projectId,
+      type: 'task_created',
+      description: `Task "${newTask.title}" created`,
+    });
+  };
+
+  const updateTask = (id: string, updates: Partial<Task>) => {
+    setState((prev) => ({
+      ...prev,
+      tasks: prev.tasks.map((t) =>
+        t.id === id ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t
+      ),
+    }));
+
+    const task = state.tasks.find((t) => t.id === id);
+    if (task) {
+      addActivity({
+        projectId: task.projectId,
+        type: 'task_updated',
+        description: `Task "${task.title}" updated`,
+      });
+    }
+  };
+
+  const deleteTask = (id: string) => {
+    const task = state.tasks.find((t) => t.id === id);
+    setState((prev) => ({
+      ...prev,
+      tasks: prev.tasks.filter((t) => t.id !== id),
+    }));
+
+    if (task) {
+      addActivity({
+        projectId: task.projectId,
+        type: 'task_deleted',
+        description: `Task "${task.title}" deleted`,
+      });
+    }
+  };
+
   const resetData = () => {
     const initial = getInitialState();
     setState(initial);
+  };
+
+  const importData = async (jsonString: string) => {
+    const imported = importStateFromJSON(jsonString);
+    setState(imported);
+    addActivity({
+      projectId: '', // System activity
+      type: 'created',
+      description: 'Data imported from file',
+    });
+  };
+
+  const loadDemo = async () => {
+    const demo = await loadDemoData('/fixtures/demo-project.json');
+    setState(demo);
   };
 
   const exportJSON = () => {
@@ -136,8 +213,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         updateProject,
         deleteProject,
         updateChecklist,
+        addTask,
+        updateTask,
+        deleteTask,
         addActivity,
         resetData,
+        importData,
+        loadDemo,
         exportJSON,
       }}
     >

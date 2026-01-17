@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "demo-project-001",
+      "stage": "edit",
+      "metadata": {
+        "title": "The Complete Guide to Self-Publishing",
+        "subtitle": "From Manuscript to Market",
+        "author": "Demo Author",
+        "penName": "Publishing Pro",
+        "series": "Author Success Series",
+        "isbn": "978-0-123456-78-9",
+        "trim": "6x9",
+        "keywords": [
+          "self-publishing",
+          "indie author",
+          "book marketing",
+          "publishing guide",
+          "writing business"
+        ],
+        "categories": [
+          "Business",
+          "Writing",
+          "Self-Help"
+        ],
+        "blurb": "Everything you need to know about self-publishing in the modern era. This comprehensive guide takes you through every step of the publishing journey, from completing your manuscript to marketing your finished book. Learn the strategies that successful indie authors use to build their publishing businesses."
+      },
+      "checklist": [
+        {
+          "id": "cl-001",
+          "label": "Complete final manuscript revision",
+          "platform": "both",
+          "completed": true
+        },
+        {
+          "id": "cl-002",
+          "label": "Hire professional editor",
+          "platform": "both",
+          "completed": true
+        },
+        {
+          "id": "cl-003",
+          "label": "Commission book cover design",
+          "platform": "both",
+          "completed": false,
+          "dueDate": "2026-02-01"
+        },
+        {
+          "id": "cl-004",
+          "label": "Format interior for print",
+          "platform": "both",
+          "completed": false
+        }
+      ],
+      "assets": [
+        {
+          "id": "asset-001",
+          "type": "interior",
+          "fileName": "complete-guide-manuscript-v3.docx",
+          "uploadedAt": "2026-01-10T10:00:00.000Z"
+        }
+      ],
+      "notes": "Manuscript has been through two rounds of editing. Working with designer on cover concepts. Target publication date: March 2026.",
+      "createdAt": "2025-12-01T00:00:00.000Z",
+      "updatedAt": "2026-01-15T14:30:00.000Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-001",
+      "projectId": "demo-project-001",
+      "title": "Review editor feedback",
+      "description": "Go through developmental editor's notes and implement suggested changes",
+      "status": "done",
+      "dueDate": "2026-01-10",
+      "owner": "Demo Author",
+      "tags": ["editing", "high-priority"],
+      "createdAt": "2025-12-15T00:00:00.000Z",
+      "updatedAt": "2026-01-10T16:00:00.000Z"
+    },
+    {
+      "id": "task-002",
+      "projectId": "demo-project-001",
+      "title": "Finalize cover design",
+      "description": "Review designer's three cover concepts and select final design",
+      "status": "doing",
+      "dueDate": "2026-01-25",
+      "owner": "Demo Author",
+      "tags": ["cover", "design"],
+      "createdAt": "2026-01-05T00:00:00.000Z",
+      "updatedAt": "2026-01-17T10:00:00.000Z"
+    },
+    {
+      "id": "task-003",
+      "projectId": "demo-project-001",
+      "title": "Write back cover copy",
+      "description": "Draft compelling back cover description (150-200 words)",
+      "status": "todo",
+      "dueDate": "2026-01-28",
+      "tags": ["marketing", "writing"],
+      "createdAt": "2026-01-12T00:00:00.000Z",
+      "updatedAt": "2026-01-12T00:00:00.000Z"
+    },
+    {
+      "id": "task-004",
+      "projectId": "demo-project-001",
+      "title": "Set up author website",
+      "description": "Create landing page for book launch with email signup",
+      "status": "todo",
+      "dueDate": "2026-02-15",
+      "owner": "Demo Author",
+      "tags": ["marketing", "website"],
+      "createdAt": "2026-01-08T00:00:00.000Z",
+      "updatedAt": "2026-01-08T00:00:00.000Z"
+    }
+  ],
+  "activities": [
+    {
+      "id": "act-001",
+      "projectId": "demo-project-001",
+      "type": "created",
+      "description": "Project 'The Complete Guide to Self-Publishing' created",
+      "timestamp": "2025-12-01T00:00:00.000Z"
+    },
+    {
+      "id": "act-002",
+      "projectId": "demo-project-001",
+      "type": "stage_changed",
+      "description": "Project moved to Edit stage",
+      "timestamp": "2026-01-10T16:00:00.000Z"
+    },
+    {
+      "id": "act-003",
+      "projectId": "demo-project-001",
+      "type": "task_created",
+      "description": "Task 'Review editor feedback' created",
+      "timestamp": "2025-12-15T00:00:00.000Z"
+    },
+    {
+      "id": "act-004",
+      "projectId": "demo-project-001",
+      "type": "task_updated",
+      "description": "Task 'Review editor feedback' marked as done",
+      "timestamp": "2026-01-10T16:00:00.000Z"
+    }
+  ],
+  "exportedAt": "2026-01-17T00:00:00.000Z",
+  "appVersion": "0.1.0"
+}

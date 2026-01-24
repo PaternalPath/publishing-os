@@ -4,6 +4,7 @@ import { AppStateProvider } from "@/lib/use-app-state";
 import { ToastProvider } from "@/lib/use-toast";
 import { Navigation } from "@/components/navigation";
 import { ToastContainer } from "@/components/toast";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 export const metadata: Metadata = {
   title: "Publishing OS - Demo",
@@ -18,15 +19,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans antialiased bg-zinc-50">
-        <AppStateProvider>
-          <ToastProvider>
-            <Navigation />
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-              {children}
-            </main>
-            <ToastContainer />
-          </ToastProvider>
-        </AppStateProvider>
+        <ErrorBoundary>
+          <AppStateProvider>
+            <ToastProvider>
+              <Navigation />
+              <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {children}
+              </main>
+              <ToastContainer />
+            </ToastProvider>
+          </AppStateProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

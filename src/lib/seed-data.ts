@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import type { AppState, Project, ChecklistItem } from '@/types';
+import type { AppState, Project, ChecklistItem, Task } from '@/types';
 import { CURRENT_SCHEMA_VERSION } from './schemas';
 
 const baseChecklist: Omit<ChecklistItem, 'id'>[] = [
@@ -162,10 +162,153 @@ export function getInitialState(): AppState {
     },
   ]);
 
+  // Create sample tasks for the projects
+  const tasks: Task[] = [
+    // Tasks for "The Midnight Garden" (marketing stage)
+    {
+      id: nanoid(),
+      projectId: projects[0].id,
+      title: 'Schedule social media campaign',
+      description: 'Plan and schedule posts for Twitter, Instagram, and Facebook',
+      status: 'doing',
+      dueDate: daysAgo(-7),
+      owner: 'Marketing Team',
+      tags: ['marketing', 'social-media'],
+      createdAt: daysAgo(35),
+      updatedAt: daysAgo(2),
+    },
+    {
+      id: nanoid(),
+      projectId: projects[0].id,
+      title: 'Send copies to book reviewers',
+      description: 'Mail advance copies to 10 book bloggers',
+      status: 'done',
+      dueDate: daysAgo(40),
+      owner: 'A. Night',
+      tags: ['marketing', 'outreach'],
+      createdAt: daysAgo(50),
+      updatedAt: daysAgo(38),
+    },
+    // Tasks for "Code of Shadows" (publish stage)
+    {
+      id: nanoid(),
+      projectId: projects[1].id,
+      title: 'Final proof review',
+      description: 'Review the final proof copy before publication approval',
+      status: 'todo',
+      dueDate: daysAgo(-3),
+      owner: 'J. Binary',
+      tags: ['publishing', 'high-priority'],
+      createdAt: daysAgo(5),
+      updatedAt: daysAgo(5),
+    },
+    {
+      id: nanoid(),
+      projectId: projects[1].id,
+      title: 'Set up pre-order page',
+      status: 'done',
+      dueDate: daysAgo(7),
+      tags: ['publishing'],
+      createdAt: daysAgo(15),
+      updatedAt: daysAgo(8),
+    },
+    // Tasks for "Whispers in the Wind" (format stage)
+    {
+      id: nanoid(),
+      projectId: projects[2].id,
+      title: 'Complete interior layout',
+      description: 'Finalize poem placement and decorative elements',
+      status: 'doing',
+      dueDate: daysAgo(-5),
+      owner: 'L. Breeze',
+      tags: ['formatting', 'design'],
+      createdAt: daysAgo(12),
+      updatedAt: daysAgo(1),
+    },
+    {
+      id: nanoid(),
+      projectId: projects[2].id,
+      title: 'Choose paper stock',
+      description: 'Select paper type for the poetry collection print run',
+      status: 'todo',
+      dueDate: daysAgo(-8),
+      tags: ['formatting', 'printing'],
+      createdAt: daysAgo(10),
+      updatedAt: daysAgo(10),
+    },
+    // Tasks for "The Last Algorithm" (edit stage)
+    {
+      id: nanoid(),
+      projectId: projects[3].id,
+      title: 'Implement editor feedback',
+      description: 'Address comments from developmental edit on chapters 5-10',
+      status: 'doing',
+      dueDate: daysAgo(-2),
+      tags: ['editing', 'high-priority'],
+      createdAt: daysAgo(10),
+      updatedAt: daysAgo(1),
+    },
+    {
+      id: nanoid(),
+      projectId: projects[3].id,
+      title: 'Research AI terminology',
+      description: 'Verify technical accuracy of AI concepts in the novel',
+      status: 'done',
+      dueDate: daysAgo(12),
+      tags: ['research', 'editing'],
+      createdAt: daysAgo(20),
+      updatedAt: daysAgo(14),
+    },
+    {
+      id: nanoid(),
+      projectId: projects[3].id,
+      title: 'Line editing pass',
+      status: 'todo',
+      dueDate: daysAgo(-14),
+      tags: ['editing'],
+      createdAt: daysAgo(8),
+      updatedAt: daysAgo(8),
+    },
+    // Tasks for "Recipes from Nowhere" (draft stage)
+    {
+      id: nanoid(),
+      projectId: projects[4].id,
+      title: 'Test remaining recipes',
+      description: 'Complete kitchen testing for the 15 remaining recipes',
+      status: 'doing',
+      dueDate: daysAgo(-10),
+      owner: 'Chef Wanderer',
+      tags: ['drafting', 'testing'],
+      createdAt: daysAgo(14),
+      updatedAt: daysAgo(2),
+    },
+    {
+      id: nanoid(),
+      projectId: projects[4].id,
+      title: 'Write introduction chapter',
+      status: 'todo',
+      dueDate: daysAgo(-20),
+      tags: ['drafting', 'writing'],
+      createdAt: daysAgo(12),
+      updatedAt: daysAgo(12),
+    },
+    {
+      id: nanoid(),
+      projectId: projects[4].id,
+      title: 'Schedule food photography',
+      description: 'Book studio time for recipe photos',
+      status: 'todo',
+      dueDate: daysAgo(-30),
+      tags: ['photography', 'planning'],
+      createdAt: daysAgo(10),
+      updatedAt: daysAgo(10),
+    },
+  ];
+
   return {
     version: CURRENT_SCHEMA_VERSION,
     projects,
-    tasks: [], // Will be populated when tasks feature is fully implemented
+    tasks,
     activities,
   };
 }
